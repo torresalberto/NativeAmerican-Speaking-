@@ -1,0 +1,7 @@
+{
+  "name": "American Cultural Insider",
+  "description": "An interactive language coach to help you master casual, natural American English. Learn slang, idioms, and pronunciation through guided practice and AI feedback.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
