@@ -104,7 +104,7 @@ Example of a phoneticProfile entry:
 
   try {
       const response: GenerateContentResponse = await ai.models.generateContent({
-          model: 'gemini-1.5-pro',
+          model: 'gemini-3-pro-preview',
           contents,
           config: {
               systemInstruction,
@@ -160,7 +160,7 @@ Your task is to create a JSON exercise object.
 
     try {
         const response: GenerateContentResponse = await ai.models.generateContent({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-3-flash-preview',
             contents: prompt,
             config: {
                 systemInstruction,
@@ -187,7 +187,7 @@ export const generateTTSAudio = async (text: string): Promise<string> => {
     const ai = getAi();
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash-preview-tts",
             contents: [{ parts: [{ text }] }],
             config: {
                 responseModalities: [Modality.AUDIO],
@@ -236,8 +236,7 @@ Example: How it looks: "going to" → How it sounds: "gonna" [ɡʌnə]`;
 
 The primary **target features** for this exercise are: ${targetFeatures.join(', ')}. Please focus your analysis on these features above all else.
 
-Your response MUST be a single JSON object that strictly follows this schema. Provide scores from 1 (needs a lot of work) to 10 (native-like). 
-Specifically, identify any individual words in the script that were mispronounced and list them in 'mispronouncedWords'. Provide 2-3 specific 'improvementSuggestions' for the user.`;
+Your response MUST be a single JSON object that strictly follows this schema. Provide scores from 1 (needs a lot of work) to 10 (native-like).`;
 
   const scoredFeedbackSchema = {
     type: Type.OBJECT,
@@ -267,8 +266,6 @@ Specifically, identify any individual words in the script that were mispronounce
     properties: {
         overallScore: { type: Type.INTEGER },
         targetFeaturesAnalysis: { type: Type.ARRAY, items: featureAnalysisSchema },
-        mispronouncedWords: { type: Type.ARRAY, items: { type: Type.STRING }, description: "List of specific words from the script that were mispronounced." },
-        improvementSuggestions: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Specific, short suggestions for improvement." },
         rhythm: scoredFeedbackSchema,
         clarity: scoredFeedbackSchema,
         naturalness: scoredFeedbackSchema,
@@ -285,7 +282,7 @@ Specifically, identify any individual words in the script that were mispronounce
 
   try {
       const response: GenerateContentResponse = await ai.models.generateContent({
-          model: 'gemini-1.5-pro',
+          model: 'gemini-3-pro-preview',
           contents,
           config: {
               systemInstruction,
@@ -318,7 +315,7 @@ export const generateVibeCheck = async (script: string): Promise<VibeCheckConten
 
     try {
         const response: GenerateContentResponse = await ai.models.generateContent({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-3-flash-preview',
             contents: prompt,
             config: {
                 systemInstruction,
@@ -375,7 +372,7 @@ export const analyzeSpokenResponse = async (challenge: string, audioBlob: Blob):
 
     try {
         const response: GenerateContentResponse = await ai.models.generateContent({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-3-flash-preview',
             contents,
             config: {
                 systemInstruction,

@@ -134,20 +134,12 @@ export interface FeatureScore {
   priority?: 'high' | 'medium' | 'low';
 }
 
-export interface VocabularyWord {
-  word: string;
-  pronunciation: string;
-  meaning: string;
-  usage: string;
-}
-
 // Learning Path
 export interface PathModule {
   id: string;
   name: string;
   description: string;
   objectives: string[];
-  vocabulary?: VocabularyWord[];
   exercises: ExerciseType[];
   assessmentCriteria: string[];
   estimatedMinutes: number;
@@ -197,8 +189,6 @@ export interface TargetInstance {
 export interface DetailedFeedback {
   overallScore: number;
   targetFeaturesAnalysis: FeatureAnalysis[];
-  mispronouncedWords?: string[];
-  improvementSuggestions?: string[];
   rhythm: { score: number; feedback: string };
   clarity: { score: number; feedback: string };
   naturalness: { score: number; feedback: string };

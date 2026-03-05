@@ -16,11 +16,6 @@ export const LEARNING_PATHS: LearningPathDefinition[] = [
           "Use 'wanna' instead of 'want to' naturally",
           "Use 'gotta' instead of 'got to' / 'have to' naturally"
         ],
-        vocabulary: [
-          { word: "Gonna", pronunciation: "[ɡʌnə]", meaning: "Reduction of 'going to'", usage: "I'm gonna go to the store." },
-          { word: "Wanna", pronunciation: "[wɑnə]", meaning: "Reduction of 'want to'", usage: "I wanna see that movie." },
-          { word: "Gotta", pronunciation: "[ɡɑɾə]", meaning: "Reduction of 'got to' or 'have to'", usage: "I gotta get some sleep." }
-        ],
         exercises: [ExerciseType.LISTEN_REPEAT, ExerciseType.SHADOWING, ExerciseType.FREESTYLE],
         assessmentCriteria: [
           "Reductions are automatic, not forced",
@@ -108,10 +103,6 @@ export const LEARNING_PATHS: LearningPathDefinition[] = [
           "Understand when /t/ becomes [ɾ] (flap)",
           "Produce the flap consistently",
           "Apply in common words: better, water, butter, letter, city"
-        ],
-        vocabulary: [
-          { word: "Water", pronunciation: "[wɑɾəɹ]", meaning: "The flap-T sounds like a fast 'D'", usage: "Can I get some water?" },
-          { word: "Better", pronunciation: "[bɛɾəɹ]", meaning: "Another example of the flap-T between vowels", usage: "I'm feeling much better today." }
         ],
         exercises: [ExerciseType.TONGUE_PLACEMENT, ExerciseType.MINIMAL_PAIRS, ExerciseType.SHADOWING],
         assessmentCriteria: [
