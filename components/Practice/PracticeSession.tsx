@@ -6,8 +6,12 @@ import { Button } from '../ui/Button';
 import { Spinner } from '../ui/Spinner';
 import { Recorder } from '../ui/Recorder';
 import FeedbackDisplay from './FeedbackDisplay';
+import VocabularyStudy from './VocabularyStudy';
+import { AudioPlayer } from '../ui/AudioPlayer';
+import { generateTTSAudio } from '../../services/geminiService';
 
 enum PracticeStep {
+  VOCABULARY,
   WARMUP,
   MAIN,
   FEEDBACK,
@@ -23,9 +27,30 @@ interface PracticeSessionProps {
 }
 
 const PracticeSession: React.FC<PracticeSessionProps> = ({ exercise, level, module, moduleNumber, onSessionComplete }) => {
-    const [step, setStep] = useState<PracticeStep>(PracticeStep.WARMUP);
+    const [step, setStep] = useState<PracticeStep>(module.vocabulary && module.vocabulary.length > 0 ? PracticeStep.VOCABULARY : PracticeStep.WARMUP);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [mainFeedback, setMainFeedback] = useState<DetailedFeedback | null>(null);
+    const [base64Audio, setBase64Audio] = useState<string>("");
+    const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+
+    React.useEffect(() => {
+        const fetchAudio = async () => {
+            setIsLoadingAudio(true);
+            try {
+                const audio = await generateTTSAudio(exercise.content.text);
+                setBase64Audio(audio);
+            } catch (error) {
+                console.error("Failed to generate exercise audio:", error);
+            } finally {
+                setIsLoadingAudio(false);
+            }
+        };
+        fetchAudio();
+    }, [exercise.content.text]);
+
+    const handleVocabularyComplete = useCallback(() => {
+        setStep(PracticeStep.WARMUP);
+    }, []);
 
     const handleWarmupComplete = useCallback(() => {
         setStep(PracticeStep.MAIN);
@@ -60,30 +85,55 @@ const PracticeSession: React.FC<PracticeSessionProps> = ({ exercise, level, modu
         }
         
         switch (step) {
+            case PracticeStep.VOCABULARY:
+                return module.vocabulary ? (
+                    <VocabularyStudy vocabulary={module.vocabulary} onComplete={handleVocabularyComplete} />
+                ) : null;
             case PracticeStep.WARMUP:
                 return (
-                    <div className="text-center space-y-6">
-                        <h3 className="text-xl font-bold text-white">Warm-up Round</h3>
-                        <p className="text-gray-400">Let's get started. Read the sentence below into your microphone. Don't worry about perfection, this is just to warm up.</p>
-                        <p className="text-lg text-gray-200 bg-gray-700/50 p-4 rounded-lg">{exercise.content.text}</p>
-                        <Recorder onRecordingComplete={handleWarmupComplete} />
+                    <div className="text-center space-y-6 w-full">
+                        <header>
+                           <h3 className="text-xl font-bold text-white">Warm-up Round</h3>
+                           <p className="text-gray-400 text-sm">Listen to the coach, then repeat.</p>
+                        </header>
+                        
+                        <div className="bg-gray-800/50 p-6 rounded-3xl border border-white/5 space-y-4">
+                           <p className="text-2xl font-bold text-indigo-100 tracking-tight leading-relaxed italic">"{exercise.content.text}"</p>
+                           <AudioPlayer base64Audio={base64Audio} isLoading={isLoadingAudio} />
+                        </div>
+                        
+                        <div className="pt-4">
+                           <Recorder onRecordingComplete={handleWarmupComplete} />
+                        </div>
                     </div>
                 );
             case PracticeStep.MAIN:
                 return (
-                    <div className="text-center space-y-6">
-                        <h3 className="text-xl font-bold text-white">Main Exercise</h3>
-                        <p className="text-gray-400">Great! Now, let's do it for real. Focus on the module objectives and give it your best shot. This one is for feedback.</p>
-                        <p className="text-lg text-gray-200 bg-gray-700/50 p-4 rounded-lg">{exercise.content.text}</p>
+                    <div className="text-center space-y-6 w-full">
+                        <header>
+                           <h3 className="text-xl font-bold text-white">Main Exercise</h3>
+                           <p className="text-gray-400 text-sm">Focus on the accent and flow. This one is for feedback.</p>
+                        </header>
+                        
+                        <div className="bg-gray-800/50 p-6 rounded-3xl border border-white/5 space-y-4">
+                           <p className="text-2xl font-bold text-indigo-100 tracking-tight leading-relaxed italic">"{exercise.content.text}"</p>
+                           <AudioPlayer base64Audio={base64Audio} isLoading={isLoadingAudio} variant="ghost" />
+                        </div>
+
                         {exercise.content.tips && (
-                            <div className="text-left text-sm p-3 bg-indigo-900/40 rounded-lg border border-indigo-500/50">
-                                <h4 className="font-bold text-indigo-300 mb-2">💡 Coach's Tips:</h4>
+                            <div className="text-left text-sm p-4 bg-indigo-500/10 rounded-2xl border border-indigo-500/20">
+                                <h4 className="font-bold text-indigo-300 mb-2 flex items-center">
+                                   <span className="mr-2">💡</span> Coach's Tips:
+                                </h4>
                                 <ul className="list-disc list-inside text-gray-300 space-y-1">
                                     {exercise.content.tips.map((tip, i) => <li key={i}>{tip}</li>)}
                                 </ul>
                             </div>
                         )}
-                        <Recorder onRecordingComplete={handleMainRecordingComplete} />
+                        
+                        <div className="pt-4">
+                           <Recorder onRecordingComplete={handleMainRecordingComplete} />
+                        </div>
                     </div>
                 );
             case PracticeStep.FEEDBACK:
@@ -104,7 +154,7 @@ const PracticeSession: React.FC<PracticeSessionProps> = ({ exercise, level, modu
         }
     };
     
-    const stepNames = ['Warmup', 'Main Exercise', 'Feedback', 'Summary'];
+    const stepNames = ['Vocabulary', 'Warmup', 'Main Exercise', 'Feedback', 'Summary'];
     const currentStepIndex = Object.values(PracticeStep).indexOf(step);
 
     return (

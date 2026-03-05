@@ -203,19 +203,20 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen text-gray-100 flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white">
       <div className="w-full max-w-2xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-indigo-400 tracking-tight">
-            The American Cultural Insider
+        <header className="text-center mb-8 animate-fade-in">
+          <h1 className="text-5xl font-black tracking-tighter mb-2">
+            <span className="text-gradient">American Cultural</span>
+            <span className="block text-white">Insider</span>
           </h1>
-          <p className="text-gray-400 mt-2">Your coach for sounding like a local 🤙</p>
+          <p className="text-gray-400 text-lg font-medium">Unlock the secrets to sounding like a local 🤙</p>
         </header>
-        <main className="bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 min-h-[400px] flex flex-col justify-center">
+        <main className="glass rounded-3xl p-6 md:p-8 min-h-[500px] flex flex-col justify-center shadow-indigo-500/10">
           {renderContent()}
         </main>
-        <footer className="text-center mt-8 text-gray-500 text-sm">
-          <p>Powered by Gemini. Built for a natural, authentic learning experience.</p>
+        <footer className="text-center mt-12 text-gray-500 text-sm font-medium tracking-wide uppercase">
+          <p className="opacity-50">Powered by Gemini · Built for authentic fluency</p>
         </footer>
       </div>
     </div>

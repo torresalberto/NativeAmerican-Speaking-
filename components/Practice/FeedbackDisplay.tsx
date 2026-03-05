@@ -25,56 +25,100 @@ const FeatureAnalysisCard: React.FC<{ analysis: FeatureAnalysis }> = ({ analysis
 
 const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ feedback, onContinue }) => {
   return (
-    <div className="flex flex-col animate-fade-in space-y-4 w-full text-left max-h-[450px] overflow-y-auto pr-2">
-        <header className="text-center">
-            <h3 className="text-2xl font-bold text-white">Your Feedback</h3>
-            <p className="text-gray-400 text-sm">Overall Score</p>
-            <p className="text-5xl font-bold text-indigo-400">{feedback.overallScore * 10}<span className="text-3xl text-gray-500">/100</span></p>
+    <div className="flex flex-col animate-fade-in space-y-6 w-full text-left max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+        <header className="text-center bg-gray-900/50 p-6 rounded-3xl border border-white/5">
+            <p className="text-gray-400 text-sm font-bold uppercase tracking-widest mb-1">Session Result</p>
+            <div className="flex items-center justify-center space-x-4">
+               <p className="text-7xl font-black text-gradient leading-none">{feedback.overallScore * 10}</p>
+               <div className="text-left">
+                  <p className="text-2xl font-bold text-white leading-tight">Great effort!</p>
+                  <p className="text-gray-500 font-medium">out of 100 points</p>
+               </div>
+            </div>
         </header>
 
-        <div className="p-3 bg-green-900/40 border border-green-500/50 rounded-lg">
-           <h4 className="font-bold text-green-300">👍 What you did well!</h4>
-           <p className="text-gray-300 text-sm">{feedback.celebration}</p>
-        </div>
+        {feedback.mispronouncedWords && feedback.mispronouncedWords.length > 0 && (
+           <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl">
+              <h4 className="font-bold text-rose-400 flex items-center mb-3">
+                 <span className="mr-2">🎯</span> Words to watch out for
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                 {feedback.mispronouncedWords.map((word, i) => (
+                    <span key={i} className="px-3 py-1 bg-rose-500/20 text-rose-200 rounded-full text-sm font-bold border border-rose-500/30">
+                       {word}
+                    </span>
+                 ))}
+              </div>
+           </div>
+        )}
 
-        <div className="p-3 bg-yellow-900/40 border border-yellow-500/50 rounded-lg">
-           <h4 className="font-bold text-yellow-300">🎯 Your #1 Focus</h4>
-           <p className="text-gray-300 text-sm">{feedback.oneThingToFix}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div className="p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
+              <h4 className="font-bold text-emerald-400 flex items-center mb-2">
+                 <span className="mr-2">⭐</span> Coach's Praise
+              </h4>
+              <p className="text-gray-300 text-sm leading-relaxed">{feedback.celebration}</p>
+           </div>
+
+           <div className="p-5 bg-amber-500/10 border border-amber-500/20 rounded-2xl">
+              <h4 className="font-bold text-amber-400 flex items-center mb-2">
+                 <span className="mr-2">🔥</span> Top Priority
+              </h4>
+              <p className="text-gray-300 text-sm leading-relaxed">{feedback.oneThingToFix}</p>
+           </div>
         </div>
         
-        <div className="p-3 bg-gray-700/50 rounded-lg">
-            <h4 className="font-bold text-indigo-300 mb-3 text-center">Detailed Analysis</h4>
-            {feedback.targetFeaturesAnalysis.length > 0 ? (
-                feedback.targetFeaturesAnalysis.map((feat, i) => (
-                    <FeatureAnalysisCard key={i} analysis={feat} />
-                ))
-            ) : (
-                <p className="text-sm text-gray-400 text-center">No specific target features were analyzed for this exercise.</p>
-            )}
+        {feedback.improvementSuggestions && feedback.improvementSuggestions.length > 0 && (
+           <div className="p-5 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl">
+              <h4 className="font-bold text-indigo-400 flex items-center mb-3">
+                 <span className="mr-2">💡</span> Pro Tips
+              </h4>
+              <ul className="space-y-2">
+                 {feedback.improvementSuggestions.map((tip, i) => (
+                    <li key={i} className="text-sm text-gray-300 flex items-start">
+                       <span className="text-indigo-400 mr-2">•</span> {tip}
+                    </li>
+                 ))}
+              </ul>
+           </div>
+        )}
 
-             <div className="grid grid-cols-3 gap-3 text-center mt-4 border-t border-gray-600 pt-3">
-                <div>
-                    <p className="text-sm text-gray-400">Rhythm</p>
-                    <ProgressBar score={feedback.rhythm.score * 10} />
+        <div className="p-6 bg-gray-800/30 rounded-3xl border border-white/5 shadow-inner">
+            <h4 className="font-bold text-white mb-6 text-lg">Phonetic Breakdown</h4>
+            <div className="space-y-6">
+               {feedback.targetFeaturesAnalysis.length > 0 ? (
+                   feedback.targetFeaturesAnalysis.map((feat, i) => (
+                       <FeatureAnalysisCard key={i} analysis={feat} />
+                   ))
+               ) : (
+                   <p className="text-sm text-gray-400 text-center py-4">No specific target features were analyzed for this exercise.</p>
+               )}
+            </div>
+
+             <div className="grid grid-cols-3 gap-6 text-center mt-10 pt-8 border-t border-white/5">
+                <div className="space-y-2">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Rhythm</p>
+                    <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                       <div className="h-full bg-indigo-500" style={{ width: `${feedback.rhythm.score * 10}%` }}></div>
+                    </div>
                 </div>
-                <div>
-                    <p className="text-sm text-gray-400">Clarity</p>
-                    <ProgressBar score={feedback.clarity.score * 10} />
+                <div className="space-y-2">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Clarity</p>
+                    <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                       <div className="h-full bg-emerald-500" style={{ width: `${feedback.clarity.score * 10}%` }}></div>
+                    </div>
                 </div>
-                <div>
-                    <p className="text-sm text-gray-400">Naturalness</p>
-                    <ProgressBar score={feedback.naturalness.score * 10} />
+                <div className="space-y-2">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Natural</p>
+                    <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                       <div className="h-full bg-amber-500" style={{ width: `${feedback.naturalness.score * 10}%` }}></div>
+                    </div>
                 </div>
              </div>
         </div>
 
-         <div className="p-3 bg-blue-900/40 border border-blue-500/50 rounded-lg">
-           <h4 className="font-bold text-blue-300"> COACH'S RECOMMENDATION</h4>
-           <p className="text-gray-300 text-sm">{feedback.practiceRecommendation}</p>
-        </div>
-
-        <div className="pt-2 text-center">
-            <Button onClick={onContinue}>Got It, Continue!</Button>
+        <div className="pt-4 text-center pb-6">
+            <Button onClick={onContinue} className="w-full sm:w-auto px-12 py-4 rounded-full text-lg shadow-xl shadow-indigo-500/20">Keep Going! 🚀</Button>
         </div>
     </div>
   );
