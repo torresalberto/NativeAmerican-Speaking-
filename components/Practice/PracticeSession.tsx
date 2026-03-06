@@ -26,31 +26,26 @@ const PracticeSession: React.FC<PracticeSessionProps> = ({ exercise, level, modu
     const [step, setStep] = useState<PracticeStep>(PracticeStep.WARMUP);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [mainFeedback, setMainFeedback] = useState<DetailedFeedback | null>(null);
-    const [sessionHistory, setSessionHistory] = useState<Blob[]>([]);
 
-    const handleWarmupComplete = useCallback((blob: Blob) => {
-        setSessionHistory(prev => [...prev, blob]);
+    const handleWarmupComplete = useCallback(() => {
         setStep(PracticeStep.MAIN);
     }, []);
 
     const handleMainRecordingComplete = useCallback(async (blob: Blob) => {
         setIsAnalyzing(true);
         try {
-            const analysis = await analyzeAudioDetailed(exercise.content.text, blob, module.objectives, level, sessionHistory);
+            const analysis = await analyzeAudioDetailed(exercise.content.text, blob, module.objectives, level);
             setMainFeedback(analysis);
-            setSessionHistory(prev => [...prev, blob]);
             setStep(PracticeStep.FEEDBACK);
         } catch (error) {
             console.error("Error analyzing main recording:", error);
+            // In a real app, you'd show an error message to the user
+            // For now, we'll just move on to prevent getting stuck
             setStep(PracticeStep.SUMMARY);
         } finally {
             setIsAnalyzing(false);
         }
-    }, [exercise.content.text, module.objectives, level, sessionHistory]);
-
-    const handleRetry = () => {
-        setStep(PracticeStep.MAIN);
-    };
+    }, [exercise.content.text, module.objectives, level]);
 
 
     const renderContent = () => {
@@ -93,14 +88,7 @@ const PracticeSession: React.FC<PracticeSessionProps> = ({ exercise, level, modu
                 );
             case PracticeStep.FEEDBACK:
                 return mainFeedback ? (
-                    <div className="w-full flex flex-col space-y-6">
-                        <FeedbackDisplay feedback={mainFeedback} onContinue={() => setStep(PracticeStep.SUMMARY)} />
-                        <div className="flex justify-center pt-4 border-t border-gray-700">
-                             <Button onClick={handleRetry} className="bg-transparent border border-indigo-500 text-indigo-300 hover:bg-indigo-900/20">
-                                🔄 Try Again (Improve your score)
-                             </Button>
-                        </div>
-                    </div>
+                    <FeedbackDisplay feedback={mainFeedback} onContinue={() => setStep(PracticeStep.SUMMARY)} />
                 ) : (
                     <p className="text-red-400">Sorry, feedback is currently unavailable.</p>
                 );

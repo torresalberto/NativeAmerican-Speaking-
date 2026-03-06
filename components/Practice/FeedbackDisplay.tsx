@@ -15,10 +15,9 @@ const FeatureAnalysisCard: React.FC<{ analysis: FeatureAnalysis }> = ({ analysis
             <p className="font-semibold text-white">{analysis.feature}</p>
             <p className="font-bold text-indigo-300">{analysis.score * 10}</p>
         </div>
-        <div className="text-xs text-gray-400 italic bg-gray-800 p-2 rounded mt-1 space-y-1">
-            <p><span className="font-semibold text-gray-300">How it looks:</span> "{analysis.howItLooks}" → <span className="font-semibold text-gray-300">How it sounds:</span> "{analysis.howItSounds}"</p>
-            {analysis.timing && <p><span className="font-semibold text-indigo-400">Timing:</span> {analysis.timing}</p>}
-        </div>
+        <p className="text-xs text-gray-400 italic bg-gray-800 p-2 rounded mt-1">
+            <span className="font-semibold text-gray-300">How it looks:</span> "{analysis.howItLooks}" → <span className="font-semibold text-gray-300">How it sounds:</span> "{analysis.howItSounds}"
+        </p>
         <p className="text-xs text-gray-300 mt-2"><strong className="text-blue-300">💡 Tip:</strong> {analysis.tip}</p>
     </div>
 );
@@ -53,21 +52,17 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ feedback, onContinue 
                 <p className="text-sm text-gray-400 text-center">No specific target features were analyzed for this exercise.</p>
             )}
 
-             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mt-4 border-t border-gray-600 pt-3">
+             <div className="grid grid-cols-3 gap-3 text-center mt-4 border-t border-gray-600 pt-3">
                 <div>
-                    <p className="text-xs text-gray-400 mb-1">Rhythm</p>
+                    <p className="text-sm text-gray-400">Rhythm</p>
                     <ProgressBar score={feedback.rhythm.score * 10} />
                 </div>
                 <div>
-                    <p className="text-xs text-gray-400 mb-1">Timing</p>
-                    <ProgressBar score={feedback.timingAlignment.score * 10} />
-                </div>
-                <div>
-                    <p className="text-xs text-gray-400 mb-1">Clarity</p>
+                    <p className="text-sm text-gray-400">Clarity</p>
                     <ProgressBar score={feedback.clarity.score * 10} />
                 </div>
                 <div>
-                    <p className="text-xs text-gray-400 mb-1">Vibe</p>
+                    <p className="text-sm text-gray-400">Naturalness</p>
                     <ProgressBar score={feedback.naturalness.score * 10} />
                 </div>
              </div>

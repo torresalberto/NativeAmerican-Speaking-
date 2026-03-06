@@ -190,7 +190,6 @@ export interface DetailedFeedback {
   overallScore: number;
   targetFeaturesAnalysis: FeatureAnalysis[];
   rhythm: { score: number; feedback: string };
-  timingAlignment: { score: number; feedback: string }; // New: Rhythmic timing
   clarity: { score: number; feedback: string };
   naturalness: { score: number; feedback: string };
   celebration: string;
@@ -205,7 +204,6 @@ export interface FeatureAnalysis {
   target: string;
   howItLooks: string;
   howItSounds: string;
-  timing?: string; // New: Specific timing feedback per feature
   tip: string;
 }
 
@@ -231,7 +229,6 @@ export interface UserProgress {
   moduleProgress: Record<string, ModuleProgressData>;
   exerciseHistory: ExerciseAttempt[];
   phoneticProfile: PhoneticProfile;
-  strategicInsights?: string[]; // New: Deep-dive AI observations
   totalPracticeMinutes: number;
   totalSessions: number;
   streakDays: number;
