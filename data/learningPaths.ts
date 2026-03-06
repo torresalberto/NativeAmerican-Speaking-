@@ -102,7 +102,7 @@ export const LEARNING_PATHS: LearningPathDefinition[] = [
         objectives: [
           "Understand when /t/ becomes [ɾ] (flap)",
           "Produce the flap consistently",
-          "Apply in common words: better, water, butter, letter, city"
+          "Apply in common words: city, water, later, whaddya, heading"
         ],
         exercises: [ExerciseType.TONGUE_PLACEMENT, ExerciseType.MINIMAL_PAIRS, ExerciseType.SHADOWING],
         assessmentCriteria: [

@@ -4,11 +4,11 @@ import { AssessmentText } from '../types';
 export const ASSESSMENT_TEXTS: AssessmentText[] = [
   {
     id: 'flap-t',
-    text: "Better butter makes better batter. I'm pretty certain about that.",
+    text: "I'm heading to the city later to grab some water. Whaddya think about that?",
     targets: [
       {
         sound: 'ɾ', // flap-t
-        examples: ['better', 'butter', 'pretty'],
+        examples: ['heading', 'city', 'later', 'water', 'whaddya'],
         commonErrors: ['Using hard /t/', 'Using /d/']
       }
     ],
@@ -16,11 +16,11 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'connected-speech',
-    text: "What are you going to do about it? I would've called, but I didn't want to.",
+    text: "Whatcha gonna do tonight? I woulda called but I didn't wanna bug ya.",
     targets: [
       {
         sound: 'wɑɾəjə', // whatcha/whaddya
-        examples: ["What are you", "going to", "would've"],
+        examples: ["Whatcha", "gonna", "woulda", "wanna"],
         commonErrors: ['Word-by-word pronunciation', 'Missing reductions']
       }
     ],
@@ -28,7 +28,7 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'th-sounds',
-    text: "I think they're over there with their mother and father.",
+    text: "I think they're over there with their mother and father. Check 'em out.",
     targets: [
       {
         sound: 'θ/ð',
@@ -40,11 +40,11 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'vowel-quality',
-    text: "He can't decide between the red and the green. It's really not that bad.",
+    text: "He can't decide between the red and the green. It's lowkey not that bad.",
     targets: [
       {
         sound: 'æ/ɛ/ɪ',
-        examples: ['can\'t', 'red', 'green', 'really', 'bad'],
+        examples: ['can\'t', 'red', 'green', 'really', 'bad', 'lowkey'],
         commonErrors: ['Vowel confusion', 'Neutral vowels instead of specific']
       }
     ],
@@ -52,7 +52,7 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'rhythm-stress',
-    text: "I DIDN'T say he STOLE my money. I said he MIGHT have.",
+    text: "I DIDN'T say he STOLE my money. I'm just sayin' he MIGHT have.",
     targets: [
       {
         sound: 'stress-timing',
