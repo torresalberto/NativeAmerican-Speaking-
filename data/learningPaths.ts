@@ -1,4 +1,3 @@
-
 import { LearningPath, LearningPathDefinition, ExerciseType } from '../types';
 
 export const LEARNING_PATHS: LearningPathDefinition[] = [
@@ -117,192 +116,237 @@ export const LEARNING_PATHS: LearningPathDefinition[] = [
         description: "The sounds that don't exist in most languages",
         objectives: [
           "Produce voiced /ð/ (this, that, the)",
-          "Produce voiceless /θ/ (think, thank, thing)",
-          "Distinguish from /t/, /d/, /s/, /z/"
+          "Produce voiceless /θ/ (think, thank, thought)",
+          "Distinguish between TH and T/D/S/Z"
         ],
-        exercises: [ExerciseType.MIRROR_PRACTICE, ExerciseType.MINIMAL_PAIRS, ExerciseType.TONGUE_TWISTERS],
+        exercises: [ExerciseType.MIRROR_PRACTICE, ExerciseType.MINIMAL_PAIRS, ExerciseType.FREESTYLE],
         assessmentCriteria: [
-          "Clear TH production",
-          "No substitution errors"
+          "Correct tongue placement",
+          "Clear distinction between voiced and voiceless"
         ],
         estimatedMinutes: 20
       },
       {
         id: 'sa-3',
         name: "The American R",
-        description: "The retroflex/bunched R that defines American speech",
+        description: "That unique 'rhotic' sound",
         objectives: [
-          "Understand tongue position for American R",
-          "Produce R in initial position (red, right)",
-          "Produce R in final position (car, far)",
-          "Produce R-colored vowels (bird, work, world)"
+          "Master the bunched and retroflex R",
+          "Practice R at the beginning, middle, and end of words",
+          "Handle R-colored vowels (er, ar, or, ire, ear)"
         ],
         exercises: [ExerciseType.TONGUE_PLACEMENT, ExerciseType.SHADOWING, ExerciseType.WORD_LISTS],
         assessmentCriteria: [
-          "Consistent American R quality",
-          "R-colored vowels are present"
+          "Correct resonance",
+          "No trilling or tapping"
         ],
         estimatedMinutes: 25
       },
       {
         id: 'sa-4',
-        name: "Vowel Boot Camp",
-        description: "American vowels are different - let's fix them",
+        name: "Vowel Clarity: Front Vowels",
+        description: "Distinguishing beet, bit, bait, bet, bat",
         objectives: [
-          "Master the /æ/ in 'cat' (not /a/ or /e/)",
-          "Master the schwa /ə/ in unstressed syllables",
-          "Distinguish /ɪ/ (bit) from /i:/ (beat)",
-          "Produce the American /ɑ/ (hot, not British 'hot')"
+          "Master the /i/ vs /ɪ/ distinction",
+          "Master the /ɛ/ vs /æ/ distinction",
+          "Practice in minimal pairs"
         ],
-        exercises: [ExerciseType.MINIMAL_PAIRS, ExerciseType.VOWEL_CHARTS, ExerciseType.SHADOWING],
+        exercises: [ExerciseType.MINIMAL_PAIRS, ExerciseType.LISTEN_IDENTIFY, ExerciseType.VOWEL_CHARTS],
         assessmentCriteria: [
-          "Distinct vowel production",
-          "Appropriate vowel length"
+          "Accurate vowel height and tension",
+          "Clear distinction in minimal pairs"
+        ],
+        estimatedMinutes: 20
+      },
+      {
+        id: 'sa-5',
+        name: "Vowel Clarity: Back & Mixed Vowels",
+        description: "Mastering the Schwa and other tricky vowels",
+        objectives: [
+          "Master the Schwa /ə/ (the most common sound!)",
+          "Distinguish /ɑ/ (father) vs /ɔ/ (caught) - or the lack thereof!",
+          "Practice /u/ (boot) vs /ʊ/ (book)"
+        ],
+        exercises: [ExerciseType.SCHWA_SPOTTING, ExerciseType.SHADOWING, ExerciseType.FREESTYLE],
+        assessmentCriteria: [
+          "Correct vowel reduction to schwa",
+          "Accurate back vowel production"
+        ],
+        estimatedMinutes: 20
+      }
+    ]
+  },
+  {
+    path: LearningPath.RHYTHM_FLOW,
+    name: "The Rhythm Architect",
+    forWho: "You sound clear, but your stress patterns feel 'off' or non-American.",
+    modules: [
+      {
+        id: 'rf-1',
+        name: "Word Stress Patterns",
+        description: "Where the energy goes in a word",
+        objectives: [
+          "Identify stressed syllables in multi-syllabic words",
+          "Master the 'Long-Strong' vs 'Short-Weak' contrast",
+          "Understand stress shifts in related words (PHOtograph vs phoTOGraphy)"
+        ],
+        exercises: [ExerciseType.LISTEN_IDENTIFY, ExerciseType.BEAT_MAPPING, ExerciseType.SHADOWING],
+        assessmentCriteria: [
+          "Correct primary stress",
+          "Appropriate vowel reduction in unstressed syllables"
+        ],
+        estimatedMinutes: 15
+      },
+      {
+        id: 'rf-2',
+        name: "Sentence Stress & Focus",
+        description: "Highlighting the important information",
+        objectives: [
+          "Identify content words vs function words",
+          "Apply stress to content words",
+          "Use 'Focus Stress' to change meaning"
+        ],
+        exercises: [ExerciseType.BEAT_MAPPING, ExerciseType.SHADOWING, ExerciseType.FREESTYLE],
+        assessmentCriteria: [
+          "Natural sentence rhythm",
+          "Clear focus on key information"
+        ],
+        estimatedMinutes: 20
+      },
+      {
+        id: 'rf-3',
+        name: "Intonation: Questions & Statements",
+        description: "The music of the language",
+        objectives: [
+          "Master rising intonation for Yes/No questions",
+          "Master falling intonation for WH-questions and statements",
+          "Practice 'Tag Questions' intonation"
+        ],
+        exercises: [ExerciseType.INTONATION_MAPPING, ExerciseType.SHADOWING, ExerciseType.ROLE_PLAY],
+        assessmentCriteria: [
+          "Appropriate pitch movement",
+          "Natural-sounding queries"
+        ],
+        estimatedMinutes: 20
+      },
+      {
+        id: 'rf-4',
+        name: "Intonation: Emotion & Attitude",
+        description: "Expressing how you feel without saying it",
+        objectives: [
+          "Use intonation for sarcasm and irony",
+          "Express surprise, doubt, or certainty",
+          "Practice polite vs blunt intonation"
+        ],
+        exercises: [ExerciseType.ROLE_PLAY, ExerciseType.SHADOWING, ExerciseType.CONTEXT_MATCHING],
+        assessmentCriteria: [
+          "Accurate emotional conveyance",
+          "Nuanced pitch control"
+        ],
+        estimatedMinutes: 20
+      },
+      {
+        id: 'rf-5',
+        name: "The American 'Drawl' & Pace",
+        description: "Mastering the overall speed and feel",
+        objectives: [
+          "Practice 'stretching' stressed vowels",
+          "Master the use of pauses for effect",
+          "Apply all rhythm features to a long monologue"
+        ],
+        exercises: [ExerciseType.METRONOME_PRACTICE, ExerciseType.SHADOWING, ExerciseType.FREESTYLE],
+        assessmentCriteria: [
+          "Consistent American pacing",
+          "Natural use of vowel length"
         ],
         estimatedMinutes: 25
       }
     ]
   },
   {
-    path: LearningPath.RHYTHM_FLOW,
-    name: "The Beat Keeper",
-    forWho: "You sound flat or monotonous. Your timing is off. You need to feel the music of English.",
+    path: LearningPath.VOCABULARY_SLANG,
+    name: "The Slang Insider",
+    forWho: "You want to understand and use the language of the streets and social media.",
     modules: [
       {
-        id: 'rf-1',
-        name: "Stress-Timing 101",
-        description: "English is stress-timed, not syllable-timed",
+        id: 'vs-1',
+        name: "Essential Daily Slang",
+        description: "Words you'll hear every single day",
         objectives: [
-          "Understand content words vs function words",
-          "Learn to stress content words, reduce function words",
-          "Practice with timed exercises"
+          "Master 'What's up', 'My bad', 'No worries', 'For sure'",
+          "Understand the many uses of 'Like'",
+          "Use 'Cool', 'Awesome', 'Sweet' appropriately"
         ],
-        exercises: [ExerciseType.BEAT_MAPPING, ExerciseType.SHADOWING, ExerciseType.METRONOME_PRACTICE],
+        exercises: [ExerciseType.CONTEXT_MATCHING, ExerciseType.DIALOGUE_PRACTICE, ExerciseType.FREESTYLE],
         assessmentCriteria: [
-          "Clear stress differentiation",
-          "Natural rhythm emerging"
-        ],
-        estimatedMinutes: 20
-      },
-      {
-        id: 'rf-2',
-        name: "The Schwa: Your Secret Weapon",
-        description: "The most common sound in English that you're probably not using",
-        objectives: [
-          "Identify where schwa appears in words",
-          "Produce schwa consistently",
-          "Reduce unstressed syllables appropriately"
-        ],
-        exercises: [ExerciseType.SCHWA_SPOTTING, ExerciseType.SHADOWING, ExerciseType.DICTATION],
-        assessmentCriteria: [
-          "Appropriate reduction",
-          "Maintained intelligibility"
+          "Natural usage in context",
+          "Correct understanding of nuance"
         ],
         estimatedMinutes: 15
       },
       {
-        id: 'rf-3',
-        name: "Intonation Patterns",
-        description: "The melody that conveys meaning",
-        objectives: [
-          "Master statement intonation (falling)",
-          "Master yes/no question intonation (rising)",
-          "Master WH-question intonation (falling)",
-          "Use intonation for emphasis"
-        ],
-        exercises: [ExerciseType.INTONATION_MAPPING, ExerciseType.SHADOWING, ExerciseType.ROLE_PLAY],
-        assessmentCriteria: [
-          "Appropriate intonation for context",
-          "Natural melody"
-        ],
-        estimatedMinutes: 20
-      },
-      {
-        id: 'rf-4',
-        name: "Emphasis & Focus",
-        description: "How to highlight what's important",
-        objectives: [
-          "Use contrastive stress (I didn't say HE stole it, I said SHE did)",
-          "Highlight new information",
-          "De-emphasize given information"
-        ],
-        exercises: [ExerciseType.FOCUS_DRILLS, ExerciseType.SHADOWING, ExerciseType.CONVERSATION],
-        assessmentCriteria: [
-          "Clear emphasis placement",
-          "Natural information structure"
-        ],
-        estimatedMinutes: 20
-      }
-    ]
-  },
-  {
-    path: LearningPath.VOCABULARY_SLANG,
-    name: "The Culture Code",
-    forWho: "Your pronunciation is good, but you sound like a textbook. Time to sound REAL.",
-    modules: [
-      {
-        id: 'vs-1',
-        name: "Essential Slang: Tier 1",
-        description: "The slang everyone uses every day",
-        objectives: [
-          "Master: gonna, wanna, gotta, kinda, sorta",
-          "Master: cool, chill, dope, lit, fire (when appropriate)",
-          "Master: vibe, lowkey, highkey, GOAT, slaps"
-        ],
-        exercises: [ExerciseType.CONTEXT_MATCHING, ExerciseType.DIALOGUE_PRACTICE, ExerciseType.FREESTYLE],
-        assessmentCriteria: [
-          "Appropriate usage",
-          "Natural integration"
-        ],
-        estimatedMinutes: 20
-      },
-      {
         id: 'vs-2',
-        name: "Phrasal Verbs: The American Way",
-        description: "The verbs that make English so confusing (and natural)",
+        name: "Social Media & Gen Z Talk",
+        description: "The language of the internet",
         objectives: [
-          "Master: figure out, work out, hang out, check out",
-          "Master: put up with, come up with, get away with",
-          "Master: blow up, break down, show up, turn up"
+          "Understand 'Bet', 'No cap', 'Sus', 'Vibe', 'Ghosted'",
+          "Practice using these in digital-style contexts",
+          "Identify when NOT to use this slang"
         ],
-        exercises: [ExerciseType.REPLACE_FORMAL, ExerciseType.DIALOGUE_PRACTICE, ExerciseType.SHADOWING],
+        exercises: [ExerciseType.TRANSLATION, ExerciseType.ROLE_PLAY, ExerciseType.FREESTYLE],
         assessmentCriteria: [
-          "Correct usage",
-          "Natural selection over formal alternatives"
+          "Accurate usage of modern terms",
+          "Understanding of social appropriateness"
         ],
         estimatedMinutes: 20
       },
       {
         id: 'vs-3',
-        name: "Filler Words & Hedges",
-        description: "The 'ums' and 'likes' that make you sound human",
+        name: "Phrasal Verbs in Action",
+        description: "The building blocks of casual speech",
         objectives: [
-          "Use: like, you know, I mean, basically",
-          "Use: kinda, sorta, pretty much, more or less",
-          "Use appropriate hedging: might, could, probably"
+          "Master 'hang out', 'check out', 'work out', 'show up'",
+          "Practice separable vs inseparable phrasal verbs",
+          "Replace formal verbs with phrasal verbs"
         ],
-        exercises: [ExerciseType.NATURAL_INSERTION, ExerciseType.SHADOWING, ExerciseType.CONVERSATION],
+        exercises: [ExerciseType.REPLACE_FORMAL, ExerciseType.SHADOWING, ExerciseType.SENTENCE_BUILD],
         assessmentCriteria: [
-          "Natural filler usage",
-          "Not overused"
+          "Automatic use of phrasal verbs",
+          "Correct word order"
         ],
-        estimatedMinutes: 15
+        estimatedMinutes: 20
       },
       {
         id: 'vs-4',
-        name: "Cultural References & Expressions",
-        description: "The stuff that makes Americans laugh and nod",
+        name: "Idioms for Every Situation",
+        description: "Sayings that don't mean what they say",
         objectives: [
-          "Understand common references (sports, TV, movies)",
-          "Use expressions: that's a stretch, no cap, bet, say less",
-          "Navigate small talk topics"
+          "Master 'Piece of cake', 'Under the weather', 'Break a leg'",
+          "Understand the cultural origin of common idioms",
+          "Use idioms naturally in stories"
         ],
-        exercises: [ExerciseType.REFERENCE_MATCHING, ExerciseType.ROLE_PLAY, ExerciseType.DIALOGUE_PRACTICE],
+        exercises: [ExerciseType.NATURAL_INSERTION, ExerciseType.SHADOWING, ExerciseType.FREESTYLE],
         assessmentCriteria: [
-          "Recognition and appropriate use",
-          "Cultural sensitivity"
+          "Correct idiomatic usage",
+          "Natural integration in flow"
         ],
         estimatedMinutes: 20
+      },
+      {
+        id: 'vs-5',
+        name: "The Art of the 'Vibe Check'",
+        description: "Understanding subtext and cultural references",
+        objectives: [
+          "Identify sarcasm and dry humor",
+          "Understand common cultural references (movies, sports, memes)",
+          "Practice 'reading the room' in American social settings"
+        ],
+        exercises: [ExerciseType.REFERENCE_MATCHING, ExerciseType.CONVERSATION, ExerciseType.ROLE_PLAY],
+        assessmentCriteria: [
+          "Can identify subtext",
+          "Appropriate cultural responses"
+        ],
+        estimatedMinutes: 25
       }
     ]
   }

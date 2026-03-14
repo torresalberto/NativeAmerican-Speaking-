@@ -1,40 +1,38 @@
 import { Goal } from '../types';
 
-// Differentiate content types properly
-
 export interface ContentStyle {
-  style: 'casual' | 'slang';
+  style: string;
   characteristics: string[];
   examplePhrases: string[];
 }
 
-export const CONTENT_STYLES: Record<Goal, ContentStyle> = {
+export const CONTENT_STYLES: { [key in Goal]: ContentStyle } = {
   [Goal.CASUAL]: {
-    style: 'casual',
+    style: "Natural & Clear",
     characteristics: [
-      "Natural contractions (I'm, you're, we've)",
-      "Common reductions (gonna, wanna)",
-      "Relaxed but clean language",
-      "Universally understood"
+      "Focus on standard American connected speech",
+      "Common reductions (gonna, wanna, gotta)",
+      "Natural sentence-level stress and rhythm",
+      "Clear, standard vowel quality"
     ],
     examplePhrases: [
-      "I'm gonna grab some coffee. Want anything?",
-      "So what're you up to this weekend?",
-      "That's pretty cool, actually."
+      "I'm gonna head out in a bit.",
+      "What are you guys up to tonight?",
+      "I would've called, but my phone died."
     ]
   },
   [Goal.SLANG]: {
-    style: 'slang',
+    style: "Fluent with Slang",
     characteristics: [
-      "Current slang (fire, lowkey, no cap)",
-      "Internet/meme language",
-      "Regional expressions",
-      "Generational markers"
+      "Heavy use of modern American slang and idioms",
+      "Mastery of phrasal verbs",
+      "Understanding of cultural subtext and nuance",
+      "Advanced reductions and rapid speech patterns"
     ],
     examplePhrases: [
-      "Bro that movie was lowkey fire, no cap.",
-      "I'm dead 💀 that's actually hilarious.",
-      "The vibes were immaculate, not gonna lie."
+      "That party was low-key fire, no cap.",
+      "I think he's just ghosting her at this point.",
+      "Bet! I'll be there in five."
     ]
   }
 };

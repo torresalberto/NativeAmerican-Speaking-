@@ -1,4 +1,3 @@
-
 import { AssessmentText } from '../types';
 
 export const ASSESSMENT_TEXTS: AssessmentText[] = [

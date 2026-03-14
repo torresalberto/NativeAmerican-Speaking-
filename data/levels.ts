@@ -2,7 +2,7 @@ import { Level } from '../types';
 
 export interface LevelDefinition {
   name: Level;
-  range: [number, number]; // score range
+  range: [number, number];
   description: string;
   phoneticMarkers: string[];
   canDo: string[];
@@ -13,78 +13,67 @@ export interface LevelDefinition {
 export const LEVEL_DEFINITIONS: LevelDefinition[] = [
   {
     name: Level.TOURIST,
-    range: [1, 3],
-    description: "You're understood, but your accent is clearly non-native. You're speaking 'textbook English'.",
+    range: [1, 4],
+    description: "You're understood, but your accent is very prominent. You often translate word-for-word from your native language.",
     phoneticMarkers: [
-      "Word-by-word pronunciation (no connected speech)",
-      "Hard /t/ sounds where flap-t is expected",
-      "/θ/ and /ð/ substitutions (using /t/, /d/, /s/, or /z/)",
-      "Vowels are often too pure/tense (not relaxed American vowels)",
-      "Syllable-timed rhythm instead of stress-timed"
+      "Syllable-timed rhythm (every syllable has equal weight)",
+      "Hard /t/ sounds instead of flaps",
+      "Vowels are often neutralized or substituted",
+      "Limited use of connected speech"
     ],
     canDo: [
-      "Be understood in most situations",
-      "Handle basic transactions",
-      "Have simple conversations"
+      "Handle basic survival interactions",
+      "Be understood with some effort from the listener",
+      "Produce individual sounds correctly in isolation"
     ],
     workingOn: [
-      "Basic connected speech patterns (gonna, wanna, gotta)",
-      "The flap-t (better = bedder)",
-      "Relaxing vowel sounds",
-      "Word stress basics"
+      "Basic vowel distinctions",
+      "Introduction to the flap-t",
+      "Beginning to link words together"
     ],
-    targetTimeToNextLevel: "2-4 weeks of daily practice"
+    targetTimeToNextLevel: "20-30 hours of focused practice"
   },
   {
     name: Level.LOCAL,
-    range: [4, 7],
-    description: "You sound comfortable. People might ask 'where are you from?' but you blend in most casual conversations.",
+    range: [5, 7],
+    description: "You sound natural and clear. You use common reductions and have a good grasp of American rhythm, though some 'foreign' markers remain.",
     phoneticMarkers: [
-      "Using connected speech in common phrases",
-      "Flap-t is appearing but inconsistent",
-      "/θ/ and /ð/ are mostly accurate",
-      "Vowels are more relaxed",
-      "Some stress-timing emerging"
+      "Consistent use of the flap-t in common words",
+      "Good use of 'gonna', 'wanna', 'gotta'",
+      "Developing sentence-level stress patterns",
+      "Most vowel distinctions are clear"
     ],
     canDo: [
-      "Follow fast casual speech",
-      "Use common reductions naturally",
-      "Handle small talk comfortably",
-      "Understand most slang in context"
+      "Participate in most social and professional conversations",
+      "Use common slang and idioms correctly",
+      "Self-correct many pronunciation errors"
     ],
     workingOn: [
-      "Consistent flap-t usage",
-      "Advanced contractions (would've, could've, should've)",
-      "Intonation patterns for questions/statements",
-      "Rhythm in longer sentences",
-      "Slang production (not just comprehension)"
+      "Nuanced intonation for emotion and attitude",
+      "Advanced linking and reductions",
+      "Mastering tricky vowel pairs (e.g., /ɪ/ vs /i/)"
     ],
-    targetTimeToNextLevel: "4-8 weeks of daily practice"
+    targetTimeToNextLevel: "40-60 hours of focused practice"
   },
   {
     name: Level.INSIDER,
     range: [8, 10],
-    description: "You sound American. People are surprised when you mention you're not native. You get the jokes, the references, the vibes.",
+    description: "You're often mistaken for a native speaker. Your flow, rhythm, and use of cultural nuance are highly advanced.",
     phoneticMarkers: [
-      "Automatic connected speech",
-      "Consistent flap-t",
-      "Natural stress-timing",
-      "American vowel quality",
-      "Appropriate intonation for all contexts"
+      "Native-like stress-timed rhythm",
+      "Nuanced use of pitch and intonation",
+      "Advanced connected speech (e.g., 'whaddya', 'didja')",
+      "Precise vowel quality even in rapid speech"
     ],
     canDo: [
-      "Understand rapid casual speech",
-      "Use slang appropriately and naturally",
-      "Adjust register for different contexts",
-      "Get cultural references and wordplay",
-      "Sound natural on the phone (the ultimate test)"
+      "Navigate complex cultural nuances and humor",
+      "Speak with high confidence in any setting",
+      "Use a wide range of slang and registers appropriately"
     ],
-    // FIX: Removed duplicate 'canDo' property which caused a syntax error.
     workingOn: [
-      "Regional nuances (if desired)",
-      "Professional register refinement",
-      "Cultural fluency deepening",
-      "Rare/advanced slang"
+      "Subtle regional variations (if desired)",
+      "Perfecting 'micro-rhythms' of specific social groups",
+      "Maintaining peak performance in high-stress situations"
     ],
     targetTimeToNextLevel: "Continuous refinement"
   }

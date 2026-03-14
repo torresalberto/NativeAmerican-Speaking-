@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, GenerateContentResponse, Type, Modality } from "@google/genai";
 // FIX: UserProgress and PhoneticProfile are exported from types.ts, not store/userProgress.ts.
 import { Level, VibeCheckContent, Goal, DetailedAssessmentResult, DetailedFeedback, SpokenResponseAnalysis, AssessmentText, LearningPath, PathModule, Exercise, ExerciseType, TargetedScript, FeatureAnalysis, UserProgress, PhoneticProfile as UserProgressPhoneticProfile } from '../types';
@@ -30,7 +29,7 @@ export const assessUserLevelComprehensive = async (
 ): Promise<DetailedAssessmentResult> => {
   const ai = getAi();
   const audioParts = await Promise.all(audioBlobs.map(fileToGenerativePart));
-  
+
   const systemInstruction = `You are an expert American English pronunciation diagnostician with a PhD in phonetics. You analyze speech patterns with clinical precision.
 
 Your analysis must be:
@@ -95,7 +94,7 @@ Example of a phoneticProfile entry:
         recommendedPath: { type: Type.STRING, enum: Object.values(LearningPath) },
         encouragement: { type: Type.STRING },
     },
-     required: ['overallLevel', 'levelName', 'phoneticProfile', 'topStrength', 'primaryFocus', 'secondaryFocus', 'recommendedPath', 'encouragement'],
+    required: ['overallLevel', 'levelName', 'phoneticProfile', 'topStrength', 'primaryFocus', 'secondaryFocus', 'recommendedPath', 'encouragement'],
   };
 
   const contents = {
@@ -124,7 +123,7 @@ Example of a phoneticProfile entry:
 export const generateExercise = async (level: Level, module: PathModule): Promise<Exercise> => {
     const ai = getAi();
     const systemInstruction = "You are an expert curriculum designer for American English learners. Your tone is energetic and encouraging. You create specific, targeted exercises in a structured JSON format.";
-    
+
     const prompt = `Generate a single, complete exercise object for a language learner at the '${level}' level.
 
 The current learning module is "${module.name}".
@@ -217,7 +216,7 @@ export const analyzeAudioDetailed = async (
 ): Promise<DetailedFeedback> => {
   const ai = getAi();
   const audioPart = await fileToGenerativePart(audioBlob);
-  
+
   const systemInstruction = `You are a world-class American English pronunciation coach with expertise in:
 - Phonetics and phonology (you use IPA when helpful, like [ɡʌnə] for 'gonna')
 - Second language acquisition principles
@@ -362,7 +361,7 @@ export const analyzeSpokenResponse = async (challenge: string, audioBlob: Blob):
 
     const systemInstruction = "You are an American English coach. You are analyzing a user's spoken response to a challenge question. Your feedback should be encouraging and focus on clarity and correct use of slang.";
     const prompt = `The challenge was: "${challenge}". The user responded with this audio. Please analyze their response for clarity, confidence, and correct use of any target slang. Provide a score from 1-100 and brief, encouraging feedback. Return a JSON object with 'score' (integer) and 'feedback' (string) keys.`;
-    
+
     const contents = {
         parts: [
             audioPart,
@@ -423,10 +422,10 @@ export const generateTargetedScript = async (
   difficulty: 1 | 2 | 3
 ): Promise<TargetedScript> => {
   const ai = getAi();
-  
+
   const targetFeatures = currentModule.objectives.join(', ');
   const weakAreas = getWeakAreas(userProgress.phoneticProfile);
-  
+
   const systemInstruction = `You are 'The American Cultural Insider', an expert curriculum designer creating hyper-personalized practice scripts for language learners.
 
 CRITICAL REQUIREMENTS:
@@ -470,7 +469,7 @@ Return a single JSON object that strictly adheres to the provided schema.`;
         },
         required: ['script', 'type', 'context', 'targetInstances', 'warmupPhrase', 'pronunciation_notes'],
     };
-  
+
   const contents = { parts: [{ text: prompt }] };
 
   try {

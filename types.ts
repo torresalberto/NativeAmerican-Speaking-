@@ -4,28 +4,28 @@
 
 export enum AppPhase {
   WELCOME = 'WELCOME',
-  
+
   // Assessment flow
   ASSESSMENT_INTRO = 'ASSESSMENT_INTRO',
   ASSESSMENT_RECORDING = 'ASSESSMENT_RECORDING',
   ASSESSMENT_ANALYZING = 'ASSESSMENT_ANALYZING',
   ASSESSMENT_RESULTS = 'ASSESSMENT_RESULTS',
-  
+
   // Main app
   DASHBOARD = 'DASHBOARD',
-  
+
   // Learning path
   PATH_OVERVIEW = 'PATH_OVERVIEW',
   MODULE_INTRO = 'MODULE_INTRO',
   MODULE_EXERCISE = 'MODULE_EXERCISE',
   MODULE_COMPLETE = 'MODULE_COMPLETE',
-  
+
   // Practice session
   PRACTICE_WARMUP = 'PRACTICE_WARMUP',
   PRACTICE_MAIN = 'PRACTICE_MAIN',
   PRACTICE_FEEDBACK = 'PRACTICE_FEEDBACK',
   PRACTICE_COMPLETE = 'PRACTICE_COMPLETE',
-  
+
   // Progress
   SESSION_SUMMARY = 'SESSION_SUMMARY',
   REASSESSMENT = 'REASSESSMENT',
@@ -207,18 +207,17 @@ export interface FeatureAnalysis {
   tip: string;
 }
 
-// FIX: Add missing SpokenResponseAnalysis type definition.
 export interface SpokenResponseAnalysis {
   score: number;
   feedback: string;
 }
 
-// Progress
+// User Progress
 export interface UserProgress {
   odId: string;
   createdAt: string;
   lastSessionAt: string;
-  initialAssessment: DetailedAssessmentResult | null;
+  initialAssessment: DetailedAssessmentResult;
   assessmentHistory: AssessmentHistoryEntry[];
   currentLevel: number;
   currentLevelName: Level;
@@ -226,7 +225,7 @@ export interface UserProgress {
   goal: Goal;
   completedModules: string[];
   currentModule: string | null;
-  moduleProgress: Record<string, ModuleProgressData>;
+  moduleProgress: { [moduleId: string]: ModuleProgressData };
   exerciseHistory: ExerciseAttempt[];
   phoneticProfile: PhoneticProfile;
   totalPracticeMinutes: number;
@@ -242,25 +241,20 @@ export interface AssessmentHistoryEntry {
 }
 
 export interface ModuleProgressData {
-  moduleId: string;
-  started: string;
-  completed: string | null;
-  exercisesCompleted: number;
-  exercisesTotal: number;
-  averageScore: number;
+  completed: boolean;
+  score: number;
+  lastAttemptAt: string;
 }
 
 export interface ExerciseAttempt {
-  exerciseId: string;
-  moduleId: string;
   date: string;
+  exerciseType: ExerciseType;
+  moduleId: string;
   score: number;
-  feedback: string;
-  targetFeatures: string[];
-  duration: number;
+  feedback: DetailedFeedback;
 }
 
-// Slang (keeping from original)
+// Slang & Cultural
 export interface SlangTerm {
   term: string;
   meaning: string;
