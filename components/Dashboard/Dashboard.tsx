@@ -6,6 +6,7 @@ import LevelBadge from './LevelBadge';
 import StreakTracker from './StreakTracker';
 import PathOverview from '../LearningPath/PathOverview';
 import ProgressChart from './ProgressChart';
+import InsightsGallery from './InsightsGallery';
 
 interface DashboardProps {
   userProgress: UserProgress;
@@ -37,6 +38,8 @@ const Dashboard: React.FC<DashboardProps> = ({ userProgress, learningPath, curre
             </div>
             
             <ProgressChart phoneticProfile={userProgress.phoneticProfile} />
+            
+            <InsightsGallery insights={userProgress.strategicInsights} />
 
             <PathOverview 
                 userProgress={userProgress}

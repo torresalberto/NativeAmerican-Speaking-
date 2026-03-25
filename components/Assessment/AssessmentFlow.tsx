@@ -18,6 +18,15 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ currentPhase, assessmen
   const assessmentText = ASSESSMENT_TEXTS[assessmentIndex];
   const progressPercent = ((assessmentIndex + 1) / ASSESSMENT_TEXTS.length) * 100;
 
+  if (!assessmentText && currentPhase !== AppPhase.ASSESSMENT_ANALYZING) {
+    return (
+      <div className="text-center">
+        <p className="text-red-400">Assessment content not found.</p>
+        <Button onClick={() => window.location.reload()} className="mt-4">Restart</Button>
+      </div>
+    );
+  }
+
   // FIX: Correct typo from ASSESSMENT_ANALYZE to ASSESSMENT_ANALYZING.
   if (currentPhase === AppPhase.ASSESSMENT_ANALYZING) {
     return (

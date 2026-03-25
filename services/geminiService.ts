@@ -3,6 +3,16 @@ import { GoogleGenAI, GenerateContentResponse, Type, Modality } from "@google/ge
 import { Level, VibeCheckContent, Goal, DetailedAssessmentResult, DetailedFeedback, SpokenResponseAnalysis, AssessmentText, LearningPath, PathModule, Exercise, ExerciseType, TargetedScript, FeatureAnalysis, UserProgress, PhoneticProfile as UserProgressPhoneticProfile } from '../types';
 import { LEVEL_DEFINITIONS } from "../data/levels";
 
+const SHARED_CORE_INSTRUCTIONS = `You are 'The American Cultural Insider,' a coach specializing in the transition from Mexican-Spanish logic to PURE American 'Insider' English (Casual and Slang).
+CRITICAL CONSTRAINTS:
+1. **NO British English:** Absolutely never use Britishisms (e.g., 'mate', 'cheers', 'lorry', 'innit', 'bloody'). If you use these, you fail.
+2. **PURE American Vibe:** Use General American, West Coast, or common Southern casual registers.
+3. **Subconscious Mapping:** Map Mexican-Spanish intents (e.g., 'Me regala', 'Que le iba a decir', 'Mande', '¿Cómo cree?') directly to their American 'Insider' shortcuts (e.g., 'Lemme grab', 'So anyway', 'What's that?', 'No way/For real?').
+4. **Break the 'Textbook' Shell:** Intermediate speakers are often over-polite and stiff. Push them into the 'relaxed' zone where reductions (gonna, wanna) and slang feel natural.
+5. **L1 Interference Detection:** Listen for Mexican-specific phonetic habits (s-cluster 'e', lack of aspiration, vowel mergers).
+6. **CASUAL ONLY:** Never use formal, academic, or "tongue-twister" sentences (e.g., NO "Better butter makes better batter"). Use real, casual, everyday American sentences that an "Insider" would actually say in a coffee shop, at work, or with friends.
+You have NATIVE MULTIMODAL capabilities. You listen to the audio signal for confidence, rhythm, and acoustic accuracy.`;
+
 const getAi = () => {
     const apiKey = process.env.API_KEY;
     if (!apiKey) {
@@ -30,14 +40,18 @@ export const assessUserLevelComprehensive = async (
   const ai = getAi();
   const audioParts = await Promise.all(audioBlobs.map(fileToGenerativePart));
 
-  const systemInstruction = `You are an expert American English pronunciation diagnostician with a PhD in phonetics. You analyze speech patterns with clinical precision.
+  const systemInstruction = `${SHARED_CORE_INSTRUCTIONS}
+
+You are an expert American English pronunciation diagnostician with a PhD in phonetics. You analyze speech patterns with clinical precision.
 
 Your analysis must be:
 - Specific (use IPA when relevant)
 - Actionable (identify exactly what needs to change)
 - Encouraging (celebrate strengths, frame weaknesses as opportunities)
 
-The user wants to achieve: ${goal === Goal.CASUAL ? 'clear, natural American speech' : 'fluent American speech with slang mastery'}.`;
+The user wants to achieve: ${goal === Goal.CASUAL ? 'clear, natural American speech' : 'fluent American speech with slang mastery'}.
+
+IMPORTANT: Since you specialize in the transition from Mexican-Spanish logic to PURE American English, you should recommend the 'SPANISH_TO_INSIDER' path by default for users showing typical Spanish L1 interference (e.g., s-cluster 'e', vowel merging, flat intonation, or over-polite 'textbook' phrasing). Only recommend other paths if their specific needs (like only rhythm or only slang) are much more prominent.`;
 
   const prompt = `Analyze these ${audioBlobs.length} recordings as a comprehensive pronunciation assessment.
 
@@ -111,7 +125,7 @@ Example of a phoneticProfile entry:
               responseSchema,
           }
       });
-      const jsonText = response.text || '{}';
+      const jsonText = response?.text || '{}';
       const result = JSON.parse(jsonText);
       return { ...result, goal };
   } catch (error) {
@@ -120,9 +134,33 @@ Example of a phoneticProfile entry:
   }
 };
 
-export const generateExercise = async (level: Level, module: PathModule): Promise<Exercise> => {
+// Enhanced generateSocialScript
+const getWeakAreas = (profile: UserProgressPhoneticProfile): string[] => {
+    const weakAreas: { name: string, score: number }[] = [];
+    const threshold = 7; // Defines a "weak area"
+
+    (Object.keys(profile) as Array<keyof UserProgressPhoneticProfile>).forEach(key => {
+      if (profile[key].score < threshold) {
+        // A bit of formatting for the prompt
+        const name = (key as string).replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
+        weakAreas.push({ name, score: profile[key].score });
+      }
+    });
+
+    // Sort by lowest score to prioritize the weakest areas first
+    weakAreas.sort((a, b) => a.score - b.score);
+
+    return weakAreas.map(area => area.name).slice(0, 3); // Return top 3 weakest areas
+};
+
+export const generateExercise = async (userProgress: UserProgress, module: PathModule): Promise<Exercise> => {
     const ai = getAi();
-    const systemInstruction = "You are an expert curriculum designer for American English learners. Your tone is energetic and encouraging. You create specific, targeted exercises in a structured JSON format.";
+    const systemInstruction = `${SHARED_CORE_INSTRUCTIONS}
+
+You are an expert curriculum designer for American English learners. Your tone is energetic and encouraging. You create specific, targeted exercises in a structured JSON format.`;
+
+    const weakAreas = getWeakAreas(userProgress.phoneticProfile);
+    const level = userProgress.currentLevelName;
 
     const prompt = `Generate a single, complete exercise object for a language learner at the '${level}' level.
 
@@ -130,10 +168,13 @@ The current learning module is "${module.name}".
 The module's objectives are:
 - ${module.objectives.join('\n- ')}
 
+User's specific weak areas to target (if any):
+- ${weakAreas.length > 0 ? weakAreas.join('\n- ') : 'None specified, focus on module objectives.'}
+
 Your task is to create a JSON exercise object.
 1.  First, you MUST choose one exercise type from this list of allowed types for this module: [${module.exercises.join(', ')}].
 2.  Then, create the full exercise JSON object.
-3.  The 'content.text' MUST be a very short, casual text (one or two natural sentences) that is specifically designed to help the user practice the module's objectives.
+3.  The 'content.text' MUST be a very short, casual text (one or two natural sentences) that is specifically designed to help the user practice the module's objectives and ideally their weak areas. AVOID tongue-twisters or formal academic language.
 4.  Provide 1-2 concise and highly practical 'content.tips' for the user.
 5.  Set the 'difficulty' to 1 for Tourist, 2 for Local, or 3 for Insider level.
 6.  The response MUST be a single JSON object matching the provided schema.`;
@@ -150,11 +191,13 @@ Your task is to create a JSON exercise object.
             breakdown: { type: Type.ARRAY, items: { type: Type.STRING } },
             tips: { type: Type.ARRAY, items: { type: Type.STRING } },
             modelPronunciation: { type: Type.STRING }
-          }
+          },
+          required: ['text']
         },
         targetSounds: { type: Type.ARRAY, items: { type: Type.STRING } },
         difficulty: { type: Type.INTEGER }
-      }
+      },
+      required: ['type', 'content', 'difficulty']
     };
 
     try {
@@ -164,11 +207,40 @@ Your task is to create a JSON exercise object.
             config: {
                 systemInstruction,
                 responseMimeType: 'application/json',
-                responseSchema
+                responseSchema,
+                responseModalities: [Modality.AUDIO],
+                speechConfig: {
+                    voiceConfig: {
+                        prebuiltVoiceConfig: { voiceName: 'Kore' }
+                    }
+                }
             },
         });
-        const jsonText = response.text || '{}';
-        return JSON.parse(jsonText) as Exercise;
+        const jsonText = response?.text || '{}';
+        const exercise = JSON.parse(jsonText) as Exercise;
+        
+        // Extract audio from response
+        const audioPart = response?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+        if (audioPart?.inlineData?.data && exercise.content) {
+            exercise.content.modelPronunciation = audioPart.inlineData.data;
+            exercise.content.modelPronunciationMimeType = audioPart.inlineData.mimeType;
+        }
+
+        // Generate model pronunciation using dedicated TTS model for better quality and compatibility
+        // This ensures we get a standard format that browsers can play easily
+        if (exercise.content?.text) {
+            try {
+                const ttsAudio = await generateTTSAudio(exercise.content.text);
+                if (exercise.content) {
+                    exercise.content.modelPronunciation = ttsAudio;
+                    exercise.content.modelPronunciationMimeType = 'audio/mpeg';
+                }
+            } catch (error) {
+                console.error("Failed to generate TTS audio, using multimodal output if available:", error);
+            }
+        }
+        
+        return exercise;
     } catch (error) {
         console.error("Error generating exercise:", error);
         return {
@@ -212,12 +284,16 @@ export const analyzeAudioDetailed = async (
   script: string,
   audioBlob: Blob,
   targetFeatures: string[],
-  userLevel: Level
+  userLevel: Level,
+  previousAttempts: Blob[] = []
 ): Promise<DetailedFeedback> => {
   const ai = getAi();
   const audioPart = await fileToGenerativePart(audioBlob);
+  const previousParts = await Promise.all(previousAttempts.map(fileToGenerativePart));
 
-  const systemInstruction = `You are a world-class American English pronunciation coach with expertise in:
+  const systemInstruction = `${SHARED_CORE_INSTRUCTIONS}
+
+You are a world-class American English pronunciation coach with expertise in:
 - Phonetics and phonology (you use IPA when helpful, like [ɡʌnə] for 'gonna')
 - Second language acquisition principles
 - Providing encouraging, highly actionable feedback
@@ -235,6 +311,8 @@ Example: How it looks: "going to" → How it sounds: "gonna" [ɡʌnə]`;
 
 The primary **target features** for this exercise are: ${targetFeatures.join(', ')}. Please focus your analysis on these features above all else.
 
+There are ${previousAttempts.length} previous attempts provided for context. Compare the current attempt to these to track progress in rhythm and timing.
+
 Your response MUST be a single JSON object that strictly follows this schema. Provide scores from 1 (needs a lot of work) to 10 (native-like).`;
 
   const scoredFeedbackSchema = {
@@ -242,6 +320,7 @@ Your response MUST be a single JSON object that strictly follows this schema. Pr
     properties: {
         score: { type: Type.INTEGER },
         feedback: { type: Type.STRING },
+        timing: { type: Type.STRING },
     },
     required: ['score', 'feedback'],
   };
@@ -268,15 +347,16 @@ Your response MUST be a single JSON object that strictly follows this schema. Pr
         rhythm: scoredFeedbackSchema,
         clarity: scoredFeedbackSchema,
         naturalness: scoredFeedbackSchema,
+        timingAlignment: scoredFeedbackSchema,
         celebration: { type: Type.STRING, description: "Start with a positive! What is one specific thing they did well?" },
         oneThingToFix: { type: Type.STRING, description: "What is the single most impactful thing they should focus on next?" },
         practiceRecommendation: { type: Type.STRING, description: "Suggest a concrete micro-exercise to work on the 'oneThingToFix'." },
     },
-    required: ['overallScore', 'targetFeaturesAnalysis', 'rhythm', 'clarity', 'naturalness', 'celebration', 'oneThingToFix', 'practiceRecommendation'],
+    required: ['overallScore', 'targetFeaturesAnalysis', 'rhythm', 'clarity', 'naturalness', 'timingAlignment', 'celebration', 'oneThingToFix', 'practiceRecommendation'],
   };
 
   const contents = {
-      parts: [audioPart, { text: prompt }],
+      parts: [...previousParts, audioPart, { text: prompt }],
   };
 
   try {
@@ -289,8 +369,21 @@ Your response MUST be a single JSON object that strictly follows this schema. Pr
               responseSchema,
           }
       });
-      const jsonText = response.text || '{}';
-      return JSON.parse(jsonText) as DetailedFeedback;
+      const jsonText = response?.text || '{}';
+      const parsed = JSON.parse(jsonText);
+      
+      // Ensure the structure is valid even if AI missed some fields
+      return {
+          overallScore: parsed.overallScore || 0,
+          targetFeaturesAnalysis: parsed.targetFeaturesAnalysis || [],
+          rhythm: parsed.rhythm || { score: 0, feedback: "No rhythm feedback available." },
+          clarity: parsed.clarity || { score: 0, feedback: "No clarity feedback available." },
+          naturalness: parsed.naturalness || { score: 0, feedback: "No naturalness feedback available." },
+          timingAlignment: parsed.timingAlignment || { score: 0, feedback: "No timing feedback available." },
+          celebration: parsed.celebration || "Great effort!",
+          oneThingToFix: parsed.oneThingToFix || "Keep practicing your pronunciation.",
+          practiceRecommendation: parsed.practiceRecommendation || "Try recording again to improve.",
+      } as DetailedFeedback;
   } catch (error) {
       console.error("Error analyzing audio with detailed feedback:", error);
       // Provide a structured fallback error
@@ -300,6 +393,7 @@ Your response MUST be a single JSON object that strictly follows this schema. Pr
           rhythm: { score: 0, feedback: "Analysis failed." },
           clarity: { score: 0, feedback: "Analysis failed." },
           naturalness: { score: 0, feedback: "Analysis failed." },
+          timingAlignment: { score: 0, feedback: "Analysis failed." },
           celebration: "You tried, and that's what counts! Let's try again.",
           oneThingToFix: "There was an error analyzing the audio. Please ensure you're in a quiet place.",
           practiceRecommendation: "Try recording the exercise again.",
@@ -309,7 +403,9 @@ Your response MUST be a single JSON object that strictly follows this schema. Pr
 
 export const generateVibeCheck = async (script: string): Promise<VibeCheckContent> => {
     const ai = getAi();
-    const systemInstruction = "You are 'The American Cultural Insider.' Your goal is to test a user's comprehension of nuance and slang from a text they just read, and to explain the slang.";
+    const systemInstruction = `${SHARED_CORE_INSTRUCTIONS}
+
+You are 'The American Cultural Insider.' Your goal is to test a user's comprehension of nuance and slang from a text they just read, and to explain the slang.`;
     const prompt = `Based on this text: "${script}", generate a JSON object. This object must have three keys: 'slangBreakdown', 'questions', and 'challenge'. 'slangBreakdown' must be an array of objects, where each object has a 'term' (the slang word or phrasal verb from the text) and a 'meaning' (a clear, simple explanation). 'questions' must be an array of two strings, each a question about the underlying meaning or nuance (e.g., sarcasm, word choice) for the user to think about. 'challenge' must be a string prompting the user to use one of the slang words in a spoken sentence about their own life.`;
 
     try {
@@ -343,7 +439,7 @@ export const generateVibeCheck = async (script: string): Promise<VibeCheckConten
                 }
             }
         });
-        const jsonText = response.text || '{}';
+        const jsonText = response?.text || '{}';
         return JSON.parse(jsonText) as VibeCheckContent;
     } catch (error) {
         console.error("Error generating vibe check:", error);
@@ -385,7 +481,7 @@ export const analyzeSpokenResponse = async (challenge: string, audioBlob: Blob):
                 }
             }
         });
-        const jsonText = response.text || '{}';
+        const jsonText = response?.text || '{}';
         return JSON.parse(jsonText) as SpokenResponseAnalysis;
     } catch (error) {
         console.error("Error analyzing spoken response:", error);
@@ -396,24 +492,41 @@ export const analyzeSpokenResponse = async (challenge: string, audioBlob: Blob):
     }
 };
 
-// Enhanced generateSocialScript
-const getWeakAreas = (profile: UserProgressPhoneticProfile): string[] => {
-    const weakAreas: { name: string, score: number }[] = [];
-    const threshold = 7; // Defines a "weak area"
-
-    (Object.keys(profile) as Array<keyof UserProgressPhoneticProfile>).forEach(key => {
-      if (profile[key].score < threshold) {
-        // A bit of formatting for the prompt
-        // FIX: Cast `key` to string to use string methods.
-        const name = (key as string).replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
-        weakAreas.push({ name, score: profile[key].score });
-      }
-    });
-
-    // Sort by lowest score to prioritize the weakest areas first
-    weakAreas.sort((a, b) => a.score - b.score);
-
-    return weakAreas.map(area => area.name).slice(0, 3); // Return top 3 weakest areas
+export const generateStrategicInsights = async (userProgress: UserProgress): Promise<string[]> => {
+    const ai = getAi();
+    
+    const systemInstruction = `${SHARED_CORE_INSTRUCTIONS}\n\nAnalyze user progress to identify 'Hidden Habits' based on Mexican-Spanish L1 interference. Explain the 'Why' (L1 interference) and the 'How' (The Insider way).`;
+    const prompt = `Analyze this Mexican-Spanish L1 user's phonetic profile and history:
+    
+**Profile:**
+${JSON.stringify(userProgress.phoneticProfile, null, 2)}
+**Recent History:**
+${JSON.stringify(userProgress.exerciseHistory.slice(-5), null, 2)}
+**Task:**
+Identify the underlying L1 habits (Spanish interference) or 'Textbook' behaviors holding them back.
+Return 2-3 deep-dive insights.`;
+    try {
+        const response = await ai.models.generateContent({
+            model: 'gemini-3-flash-preview',
+            contents: prompt,
+            config: {
+                systemInstruction,
+                responseMimeType: 'application/json',
+                responseSchema: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING }
+                }
+            }
+        });
+        const jsonText = response?.text || '[]';
+        return JSON.parse(jsonText) as string[];
+    } catch (error) {
+        console.error('Error generating strategic insights:', error);
+        return [
+            'Your vowels are getting clearer, but watch that e sound before s clusters.',
+            'Try using gonna or wanna more often; your formal English is great, but the reductions will give you that Insider vibe.'
+        ];
+    }
 };
 
 export const generateTargetedScript = async (
@@ -426,7 +539,9 @@ export const generateTargetedScript = async (
   const targetFeatures = currentModule.objectives.join(', ');
   const weakAreas = getWeakAreas(userProgress.phoneticProfile);
 
-  const systemInstruction = `You are 'The American Cultural Insider', an expert curriculum designer creating hyper-personalized practice scripts for language learners.
+  const systemInstruction = `${SHARED_CORE_INSTRUCTIONS}
+
+You are 'The American Cultural Insider', an expert curriculum designer creating hyper-personalized practice scripts for language learners.
 
 CRITICAL REQUIREMENTS:
 1. Scripts MUST contain the target features for the current module naturally. They should not feel forced or like a list of examples.
@@ -482,7 +597,7 @@ Return a single JSON object that strictly adheres to the provided schema.`;
               responseSchema,
           }
       });
-      const jsonText = response.text || '{}';
+      const jsonText = response?.text || '{}';
       return JSON.parse(jsonText) as TargetedScript;
   } catch (error) {
       console.error("Error generating targeted script:", error);

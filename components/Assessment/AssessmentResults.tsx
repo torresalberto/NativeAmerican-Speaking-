@@ -25,6 +25,7 @@ const pathDisplayMap: Record<LearningPath, { title: string, description: string 
     [LearningPath.CONNECTED_SPEECH]: { title: "Connected Speech", description: "Learn to link words together smoothly." },
     [LearningPath.RHYTHM_FLOW]: { title: "Rhythm & Flow", description: "Work on sentence stress and intonation." },
     [LearningPath.VOCABULARY_SLANG]: { title: "Vocabulary & Slang", description: "Expand your word choice and cultural fluency." },
+    [LearningPath.SPANISH_TO_INSIDER]: { title: "Spanish-to-Insider Bridge", description: "Specifically designed for Spanish speakers to overcome L1 interference." },
 };
 
 const PriorityBadge: React.FC<{ priority: 'high' | 'medium' | 'low' | undefined }> = ({ priority }) => {

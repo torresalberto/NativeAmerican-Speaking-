@@ -349,5 +349,92 @@ export const LEARNING_PATHS: LearningPathDefinition[] = [
         estimatedMinutes: 25
       }
     ]
+  },
+  {
+    path: LearningPath.SPANISH_TO_INSIDER,
+    name: "The Spanish-to-Insider Bridge",
+    forWho: "Specifically designed for Spanish speakers to overcome L1 interference and master American flow.",
+    modules: [
+      {
+        id: 'si-1',
+        name: "S-Cluster Mastery",
+        description: "Eliminating the 'e' before sp, st, and sk sounds",
+        objectives: [
+          "Produce 'speak', 'stop', 'school' without an initial 'e' sound",
+          "Master the s-cluster in connected speech",
+          "Practice with common phrases like 'Stop it', 'Speak up'"
+        ],
+        exercises: [ExerciseType.TONGUE_PLACEMENT, ExerciseType.MINIMAL_PAIRS, ExerciseType.SHADOWING],
+        assessmentCriteria: [
+          "No 'e' sound before s-clusters",
+          "Smooth transition into the cluster"
+        ],
+        estimatedMinutes: 20
+      },
+      {
+        id: 'si-2',
+        name: "Vowel Separation Technique",
+        description: "Fixing the merging of English vowels into the 5 Spanish vowels",
+        objectives: [
+          "Distinguish /i/ (sheep) from /ɪ/ (ship)",
+          "Distinguish /æ/ (cat) from /ɛ/ (met)",
+          "Master the /ʊ/ (book) vs /u/ (boot) distinction"
+        ],
+        exercises: [ExerciseType.MINIMAL_PAIRS, ExerciseType.VOWEL_CHARTS, ExerciseType.LISTEN_IDENTIFY],
+        assessmentCriteria: [
+          "Clear distinction between target vowel pairs",
+          "Accurate production in sentences"
+        ],
+        estimatedMinutes: 25
+      },
+      {
+        id: 'si-3',
+        name: "The Politeness Trap",
+        description: "Transforming stiff, formal 'textbook' English into natural casual speech",
+        objectives: [
+          "Replace 'Could you please...' with 'Lemme grab...' or 'Can I get...'",
+          "Use 'What's up?' instead of 'How do you do?'",
+          "Master casual filler words like 'So anyway', 'Like', 'You know'"
+        ],
+        exercises: [ExerciseType.REPLACE_FORMAL, ExerciseType.ROLE_PLAY, ExerciseType.DIALOGUE_PRACTICE],
+        assessmentCriteria: [
+          "Natural use of casual registers",
+          "Appropriate level of 'relaxed' politeness"
+        ],
+        estimatedMinutes: 20
+      },
+      {
+        id: 'si-4',
+        name: "American Intonation",
+        description: "Mastering the rise and fall patterns that signal 'Insider' status",
+        objectives: [
+          "Avoid the 'flat' Spanish intonation",
+          "Master the 'staircase' pitch pattern of American English",
+          "Use pitch to signal emphasis and emotion"
+        ],
+        exercises: [ExerciseType.INTONATION_MAPPING, ExerciseType.BEAT_MAPPING, ExerciseType.SHADOWING],
+        assessmentCriteria: [
+          "Dynamic pitch range",
+          "Correct use of focus stress"
+        ],
+        estimatedMinutes: 20
+      },
+      {
+        id: 'si-5',
+        name: "Connected Speech Magic",
+        description: "The final bridge: gonna, wanna, and advanced reductions",
+        objectives: [
+          "Master gonna, wanna, gotta, shoulda, coulda",
+          "Practice 'Whaddya' and 'Didja' for rapid conversation",
+          "Link words together to create that 'Insider' flow"
+        ],
+        exercises: [ExerciseType.SHADOWING, ExerciseType.SPEED_DRILLS, ExerciseType.CONVERSATION],
+        assessmentCriteria: [
+          "Automatic use of reductions",
+          "Native-like speech rhythm"
+        ],
+        estimatedMinutes: 25
+      }
+    ]
   }
 ];

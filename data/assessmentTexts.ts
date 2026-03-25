@@ -3,11 +3,11 @@ import { AssessmentText } from '../types';
 export const ASSESSMENT_TEXTS: AssessmentText[] = [
   {
     id: 'flap-t',
-    text: "Better butter makes better batter. I'm pretty certain about that.",
+    text: "I'll grab a bottle of water later. It's way better than soda.",
     targets: [
       {
         sound: 'ɾ', // flap-t
-        examples: ['better', 'butter', 'pretty'],
+        examples: ['bottle', 'water', 'later', 'better'],
         commonErrors: ['Using hard /t/', 'Using /d/']
       }
     ],
@@ -15,11 +15,11 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'connected-speech',
-    text: "What are you going to do about it? I would've called, but I didn't want to.",
+    text: "What are you going to do about it? I would've come over, but I didn't want to be late.",
     targets: [
       {
         sound: 'wɑɾəjə', // whatcha/whaddya
-        examples: ["What are you", "going to", "would've"],
+        examples: ["What are you", "going to", "would've", "want to"],
         commonErrors: ['Word-by-word pronunciation', 'Missing reductions']
       }
     ],
@@ -27,11 +27,11 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'th-sounds',
-    text: "I think they're over there with their mother and father.",
+    text: "I think they're over there. They're with their brother.",
     targets: [
       {
         sound: 'θ/ð',
-        examples: ['think', 'they\'re', 'there', 'their', 'mother', 'father'],
+        examples: ['think', 'they\'re', 'there', 'their', 'brother'],
         commonErrors: ['Substituting /t/ or /d/', 'Substituting /s/ or /z/']
       }
     ],
@@ -39,11 +39,11 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'vowel-quality',
-    text: "He can't decide between the red and the green. It's really not that bad.",
+    text: "I can't believe he's back. It's actually not that bad of a deal.",
     targets: [
       {
         sound: 'æ/ɛ/ɪ',
-        examples: ['can\'t', 'red', 'green', 'really', 'bad'],
+        examples: ['can\'t', 'back', 'actually', 'bad', 'deal'],
         commonErrors: ['Vowel confusion', 'Neutral vowels instead of specific']
       }
     ],
@@ -51,7 +51,7 @@ export const ASSESSMENT_TEXTS: AssessmentText[] = [
   },
   {
     id: 'rhythm-stress',
-    text: "I DIDN'T say he STOLE my money. I said he MIGHT have.",
+    text: "I DIDN'T say he STOLE the money. I said he MIGHT'VE.",
     targets: [
       {
         sound: 'stress-timing',

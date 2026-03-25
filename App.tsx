@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { AppPhase, Level, Goal, DetailedAssessmentResult, LearningPathDefinition, Exercise, UserProgress } from './types';
 import { ASSESSMENT_TEXTS } from './data/assessmentTexts';
 import { LEARNING_PATHS } from './data/learningPaths';
-import { assessUserLevelComprehensive, generateExercise } from './services/geminiService';
+import { assessUserLevelComprehensive, generateExercise, generateStrategicInsights } from './services/geminiService';
 import { loadProgress, saveProgress, initializeProgress } from './store/userProgress';
 import Welcome from './components/Welcome';
 import AssessmentFlow from './components/Assessment/AssessmentFlow';
@@ -99,7 +99,7 @@ const App: React.FC = () => {
     if (phase === AppPhase.PRACTICE_SESSION_GENERATE && userProgress && currentLearningPath) {
         const fetchExercise = async () => {
             const module = currentLearningPath.modules[currentModuleIndex];
-            const exercise = await generateExercise(userProgress.currentLevelName, module);
+            const exercise = await generateExercise(userProgress, module);
             setCurrentExercise(exercise);
             setPhase(AppPhase.PRACTICE_SESSION);
         };
@@ -107,7 +107,7 @@ const App: React.FC = () => {
     }
   }, [phase, userProgress, currentLearningPath, currentModuleIndex]);
   
-  const handleSessionComplete = useCallback(() => {
+  const handleSessionComplete = useCallback(async () => {
     if (!userProgress || !currentLearningPath) return;
 
     const completedModuleId = currentLearningPath.modules[currentModuleIndex].id;
@@ -116,9 +116,11 @@ const App: React.FC = () => {
     
     setCurrentExercise(null);
 
+    let updatedProgress: UserProgress;
+
     if (newModuleIndex < currentLearningPath.modules.length) {
       const newCurrentModuleId = currentLearningPath.modules[newModuleIndex].id;
-      const updatedProgress: UserProgress = {
+      updatedProgress = {
         ...userProgress,
         completedModules: newCompletedModules,
         currentModule: newCurrentModuleId,
@@ -126,20 +128,27 @@ const App: React.FC = () => {
         totalSessions: userProgress.totalSessions + 1,
       };
       
-      setUserProgress(updatedProgress);
-      saveProgress(updatedProgress);
       setCurrentModuleIndex(newModuleIndex);
       setPhase(AppPhase.DASHBOARD);
     } else {
-      const updatedProgress: UserProgress = {
+      updatedProgress = {
         ...userProgress,
         completedModules: newCompletedModules,
         currentModule: null, // No current module
       };
-      setUserProgress(updatedProgress);
-      saveProgress(updatedProgress);
       setPhase(AppPhase.PATH_COMPLETE);
     }
+
+    // Generate strategic insights after updating basic progress
+    try {
+      const insights = await generateStrategicInsights(updatedProgress);
+      updatedProgress.strategicInsights = insights;
+    } catch (error) {
+      console.error("Failed to generate strategic insights:", error);
+    }
+
+    setUserProgress(updatedProgress);
+    saveProgress(updatedProgress);
   }, [userProgress, currentLearningPath, currentModuleIndex]);
   
   const handleRestart = useCallback(() => {

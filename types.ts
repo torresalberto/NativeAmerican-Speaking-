@@ -51,7 +51,8 @@ export enum LearningPath {
   CONNECTED_SPEECH = 'CONNECTED_SPEECH',
   SOUND_ACCURACY = 'SOUND_ACCURACY',
   RHYTHM_FLOW = 'RHYTHM_FLOW',
-  VOCABULARY_SLANG = 'VOCABULARY_SLANG'
+  VOCABULARY_SLANG = 'VOCABULARY_SLANG',
+  SPANISH_TO_INSIDER = 'SPANISH_TO_INSIDER'
 }
 
 export enum ExerciseType {
@@ -166,6 +167,7 @@ export interface ExerciseContent {
   breakdown?: string[];
   tips?: string[];
   modelPronunciation?: string;
+  modelPronunciationMimeType?: string;
 }
 
 // Scripts
@@ -192,6 +194,7 @@ export interface DetailedFeedback {
   rhythm: { score: number; feedback: string };
   clarity: { score: number; feedback: string };
   naturalness: { score: number; feedback: string };
+  timingAlignment: { score: number; feedback: string };
   celebration: string;
   oneThingToFix: string;
   practiceRecommendation: string;
@@ -205,6 +208,7 @@ export interface FeatureAnalysis {
   howItLooks: string;
   howItSounds: string;
   tip: string;
+  timing?: string;
 }
 
 export interface SpokenResponseAnalysis {
@@ -217,7 +221,7 @@ export interface UserProgress {
   odId: string;
   createdAt: string;
   lastSessionAt: string;
-  initialAssessment: DetailedAssessmentResult;
+  initialAssessment: DetailedAssessmentResult | null;
   assessmentHistory: AssessmentHistoryEntry[];
   currentLevel: number;
   currentLevelName: Level;
@@ -225,9 +229,10 @@ export interface UserProgress {
   goal: Goal;
   completedModules: string[];
   currentModule: string | null;
-  moduleProgress: { [moduleId: string]: ModuleProgressData };
+  moduleProgress: Record<string, ModuleProgressData>;
   exerciseHistory: ExerciseAttempt[];
   phoneticProfile: PhoneticProfile;
+  strategicInsights?: string[];
   totalPracticeMinutes: number;
   totalSessions: number;
   streakDays: number;
@@ -248,10 +253,10 @@ export interface ModuleProgressData {
 
 export interface ExerciseAttempt {
   date: string;
-  exerciseType: ExerciseType;
+  exerciseType: string;
   moduleId: string;
   score: number;
-  feedback: DetailedFeedback;
+  feedback: any;
 }
 
 // Slang & Cultural
